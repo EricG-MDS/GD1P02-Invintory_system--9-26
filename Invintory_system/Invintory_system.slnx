@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="Invintory_system/Invintory_system.vcxproj" Id="5cf44dfb-23c2-4a62-8538-67aee8b8dc85" />
+</Solution>
