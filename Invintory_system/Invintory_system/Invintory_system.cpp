@@ -7,10 +7,16 @@
 
 int main()
 {   
+    // Acsessor object for double linked list functions
     dll_functions dll;
-    
-    dll.load_list("Inventory-1.txt");
-    dll.add_at_index();
-    dll.print_list();
 
+    // Start screen title
+    std::cout << "########################" << std::endl;
+    std::cout << "### Inventory System ###" << std::endl;
+    std::cout << "########################\n\n----\n" << std::endl;
+
+    while (true)
+    {
+        dll.function_call();
+    }
 }

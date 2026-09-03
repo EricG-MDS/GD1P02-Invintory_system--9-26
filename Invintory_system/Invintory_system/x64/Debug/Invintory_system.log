@@ -1,3 +1,3 @@
 ﻿  dll_functions.cpp
-C:\Users\GGPC\source\repos\Invintory_system\Invintory_system\dll_functions.cpp(197,1): warning C4715: 'dll_functions::type_to_string': not all control paths return a value
+C:\Users\GGPC\source\repos\Invintory_system\Invintory_system\dll_functions.cpp(519,1): warning C4715: 'dll_functions::type_to_string': not all control paths return a value
   Invintory_system.vcxproj -> C:\Users\GGPC\source\repos\Invintory_system\x64\Debug\Invintory_system.exe

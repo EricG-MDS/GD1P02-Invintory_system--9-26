@@ -9,7 +9,8 @@ public:
 		Weapon,
 		Armor,
 		Consumable,
-		Utility
+		Utility,
+		null_type
 	};
 
 	std::string item_name;
