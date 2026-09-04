@@ -21,7 +21,7 @@ void dll_functions::function_call()
 
 	// Calls a function selected by the user
 	std::cout << "Call function (? for function list): \n- ";
-	std::cin >> _function;
+	std::getline(std::cin, _function);
 
 	// Cheak if input is a valid funcion
 	if (std::find(std::begin(load_file_inputs), std::end(load_file_inputs), _function) != std::end(load_file_inputs))
@@ -63,10 +63,11 @@ void dll_functions::load_list(wchar_t* file)
 		{
 			std::stringstream ss(line);
 			int var_num = 0;
-
+			bool itemExists = false;
 			// split line at ,
 			while (std::getline(ss, charic, ','))
 			{
+				itemExists = true;
 				if (var_num == 0)
 				{
 					item_name = charic;
@@ -101,6 +102,8 @@ void dll_functions::load_list(wchar_t* file)
 				var_num++;
 			}
 
+			if (!itemExists) continue;
+
 			// Make node from read data
 			if (list_head && item_quantity != NULL)
 			{
@@ -123,6 +126,7 @@ void dll_functions::load_list(wchar_t* file)
 				std::cout << "Name,Type,Price,Quantity\n\n" << std::endl;
 				return;
 			}
+			item_quantity = NULL;
 		}
 
 		// Print inv
@@ -152,18 +156,18 @@ void dll_functions::load_file()
 			// Get the file name from the dialog box.
 			if (SUCCEEDED(hr))
 			{
-				IShellItem* pItem;
+				IShellItem* pItem = nullptr;
 				hr = pFileOpen->GetResult(&pItem);
 				if (SUCCEEDED(hr))
 				{
-					PWSTR pszFilePath;
+					PWSTR pszFilePath = nullptr;
 					hr = pItem->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
 
 					// Display the file name to the user.
 					if (SUCCEEDED(hr))
-					{
-						CoTaskMemFree(pszFilePath);
+					{	
 						load_list(pszFilePath);
+						CoTaskMemFree(pszFilePath);
 					}
 
 					pItem->Release();
@@ -240,18 +244,18 @@ void dll_functions::add_at_index()
 		bool index_error = 0;
 		std::cout << "Existing item to add the new item after (index)\n";
 		std::cout << "eg: \"0\" <item> \"1\" <item> \"2\" <item> \"3\"...\n- ";
-		std::cin >> index_input;
+		getline(std::cin, index_input);
 		std::cout << std::endl;
 		for (char& c : index_input)
 		{
-			if (!(c == '1' || c == '2' || c == '3' || c == '4' || c == '5' || c == '6' || c == '7' || c == '8' || c == '9' || c == '0'))
+			if (c < 48 || c > 57)
 			{
 				std::cout << "!! index can only contain intiger charicters\n" << std::endl;
 				index_error = 1;
 				continue;
 			}
 		}
-		if (!index_error) { index = stoi(index_input); }
+		if (!index_error) { index = stoi(index_input); break; }
 	}
 
 
@@ -302,10 +306,10 @@ void dll_functions::add_at_index()
 		std::cout << std::endl;
 		for (char& c : item_price_input)
 		{
-			if (c == '1' || c == '2' || c == '3' || c == '4' || c == '5' || c == '6' || c == '7' || c == '8' || c == '9' || c == '0' || c == '.' || c == ',')
+			if (c >= 48 || c <= 57 || c == '.')
 			{
-				if (!has_point && c == '.' || c == ',') { has_point = true; }
-				else if (c == '.' || c == ',')
+				if (!has_point && c == '.') { has_point = true; }
+				else if (c == '.')
 				{
 					std::cout << "!! price can not contain multiple points(.)\n" << std::endl;
 					price_error = 1;
@@ -319,7 +323,12 @@ void dll_functions::add_at_index()
 				continue;
 			}
 		}
-		if (!price_error) { item_price = stof(item_price_input); }
+		if (!price_error)
+		{
+			has_point ? item_price_input += "0" : item_price_input += ".0";
+			item_price = stof(item_price_input);
+			break;
+		}
 	}
 
 	// Quantity
@@ -331,14 +340,14 @@ void dll_functions::add_at_index()
 		std::cout << std::endl;
 		for (char& c : item_quantity_input)
 		{
-			if (!(c == '1' || c == '2' || c == '3' || c == '4' || c == '5' || c == '6' || c == '7' || c == '8' || c == '9' || c == '0'))
+			if (c < 48 || c > 57)
 			{
 				std::cout << "!! quantity can only contain intiger charicters\n" << std::endl;
 				quantity_error = 1;
 				continue;
 			}
 		}
-		if (!quantity_error) { item_quantity = stoi(item_quantity_input); }
+		if (!quantity_error) { item_quantity = stoi(item_quantity_input); break; }
 	}
 
 	// go to index
@@ -404,7 +413,7 @@ void dll_functions::remove_item()
 		std::cout << std::endl;
 		for (char& c : index_input)
 		{
-			if (!(c == '1' || c == '2' || c == '3' || c == '4' || c == '5' || c == '6' || c == '7' || c == '8' || c == '9' || c == '0'))
+			if (c < 48 || c > 57)
 			{
 				std::cout << "!! index can only contain intiger charicters\n" << std::endl;
 				index_error = 1;
